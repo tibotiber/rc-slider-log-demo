@@ -1,0 +1,13 @@
+{
+  "name": "r0mx034494",
+  "version": "1.0.0",
+  "description": null,
+  "keywords": [],
+  "homepage": "https://codesandbox.io/s/r0mx034494",
+  "main": "index.js",
+  "dependencies": {
+    "react-dom": "16.0.0",
+    "react": "16.0.0",
+    "rc-slider": "8.6.0"
+  }
+}
