@@ -1,63 +1,49 @@
 import React from "react";
 import { render } from "react-dom";
 import Slider from "rc-slider";
-import Tooltip from "rc-tooltip";
-
-import "rc-tooltip/assets/bootstrap.css";
 import "rc-slider/assets/index.css";
 
-const Handle = Slider.Handle;
+const MySlider = Slider.createSliderWithTooltip(Slider);
 
-const log2 = n => Math.log2(n);
-const antiLog2 = n => Math.pow(2, n);
-
-const handle = props => {
-  const { value, dragging, index, ...restProps } = props;
-  const logValue = log2(value);
-  return (
-    <Tooltip
-      prefixCls="rc-slider-tooltip"
-      overlay={logValue}
-      visible={dragging}
-      placement="top"
-      key={index}
-    >
-      <Handle value={value} {...restProps} />
-    </Tooltip>
-  );
-};
-
-const generateMark = x => {
-  return antiLog2(x);
-};
-
-const values = [1, 2, 3, 4, 5];
-
-const generateMarks = () => {
-  const result = {};
-  values.forEach(value => {
-    result[generateMark(value)] = value;
-  });
-  return result;
-};
-
-const marks = generateMarks();
-
-function log(value) {
-  console.log("originValue", value, "log2", log2(value));
+// just some cosmetics
+function prettyInt(x) {
+  return Math.round(x)
+    .toString()
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
-const wrapperStyle = { width: 400, margin: 50 };
+// debug utility
+function log(value) {
+  console.log({
+    value,
+    curvedValue: sliderCurve(value)
+  });
+}
+
+// change these to whatever curve function you need!
+const sliderCurve = Math.exp;
+const inverseCurve = Math.log;
+
 const App = () => (
-  <div style={wrapperStyle}>
-    <Slider
-      min={values[0]}
-      max={generateMark(values[values.length - 1])}
-      marks={marks}
-      step={1}
+  <div style={{ width: 400, margin: 50 }}>
+    <p style={{ marginBottom: "2em" }}>
+      Exponential slider from 1 to 1,000,000
+    </p>
+    <MySlider
+      min={inverseCurve(1)}
+      max={inverseCurve(1000000)}
+      marks={{
+        [inverseCurve(1)]: prettyInt(1),
+        [inverseCurve(10)]: prettyInt(10),
+        [inverseCurve(100)]: prettyInt(100),
+        [inverseCurve(1000)]: prettyInt(1000),
+        [inverseCurve(10000)]: prettyInt(10000),
+        [inverseCurve(100000)]: prettyInt(100000),
+        [inverseCurve(1000000)]: prettyInt(1000000)
+      }}
+      step={(inverseCurve(1000000) - inverseCurve(1)) / 100} // 100 steps in range
+      tipFormatter={value => prettyInt(sliderCurve(value))}
       onChange={log}
-      defaultValue={values[0]}
-      handle={handle}
     />
   </div>
 );
