@@ -7,8 +7,8 @@
   "main": "index.js",
   "dependencies": {
     "rc-slider": "8.6.4",
-    "react": "16.0.0",
-    "react-dom": "16.0.0"
+    "react": "16.7.0",
+    "react-dom": "16.7.0"
   },
   "devDependencies": {
     "react-scripts": "1.0.0"
